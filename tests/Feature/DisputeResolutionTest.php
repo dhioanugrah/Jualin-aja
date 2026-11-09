@@ -62,6 +62,17 @@ test('a dispute can only be decided once and only by admins', function () {
     expect($booking->violations()->sole()->status)->toBe(ViolationStatus::Active);
 });
 
+test('a decided dispute cannot be reopened by disputing again', function () {
+    $booking = disputedBooking();
+    $this->actingAs(User::factory()->admin()->create())->patch("/admin/sengketa/{$booking->code}", ['outcome' => 'accepted']);
+
+    $this->actingAs($booking->buyer)->post("/booking/{$booking->code}/bantah", ['dispute_note' => 'Saya ingin membuka sengketa lagi.'])
+        ->assertForbidden();
+
+    expect($booking->refresh()->status)->toBe(BookingStatus::Cancelled)
+        ->and($booking->violations()->sole()->status)->toBe(ViolationStatus::Revoked);
+});
+
 test('admins can revoke a single violation and toggle an account', function () {
     $admin = User::factory()->admin()->create();
     $violation = Violation::query()->create(['user_id' => User::factory()->create()->id, 'booking_id' => Booking::factory()->create()->id, 'type' => ViolationType::LateCancel, 'status' => ViolationStatus::Active]);

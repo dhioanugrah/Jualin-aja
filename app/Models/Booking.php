@@ -223,6 +223,7 @@ class Booking extends Model
     {
         return $this->status === BookingStatus::Cancelled
             && $this->no_show_reported_by !== null
+            && $this->dispute_resolved_at === null
             && $this->no_show_reported_by !== $user->id
             && $this->involves($user)
             && now()->lt($this->disputeDeadline());

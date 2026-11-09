@@ -51,6 +51,10 @@ class ReportController extends Controller
         $action = $data['action'];
         $owner = $target instanceof Product ? $target->seller : $target;
 
+        if ($action === 'deactivate_user' && $owner->isAdmin()) {
+            return back()->withErrors(['report' => 'Akun admin tidak bisa dinonaktifkan dari laporan.']);
+        }
+
         if ($action === 'hide_product' && ! $target instanceof Product) {
             return back()->withErrors(['report' => 'Laporan lapak tidak punya barang untuk disembunyikan.']);
         }

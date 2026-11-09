@@ -73,6 +73,21 @@ test('admins can deactivate a reported account or dismiss the report', function 
         ->and($product->refresh()->status)->toBe(ProductStatus::Approved);
 });
 
+test('admin accounts cannot be reported as a seller or deactivated through a report', function () {
+    $admin = User::factory()->admin()->create();
+    $reporter = User::factory()->create();
+
+    $this->actingAs($reporter)->post('/laporkan', ['type' => 'lapak', 'id' => $admin->id, 'reason' => ReportReason::Fraud->value])
+        ->assertNotFound();
+
+    $report = $admin->reports()->create(['reporter_id' => $reporter->id, 'reason' => ReportReason::Fraud, 'status' => ReportStatus::Open]);
+    $this->actingAs(User::factory()->admin()->create())->patch("/admin/laporan/{$report->id}", ['action' => 'deactivate_user'])
+        ->assertSessionHasErrors('report');
+
+    expect($admin->refresh()->is_active)->toBeTrue()
+        ->and($report->refresh()->status)->toBe(ReportStatus::Open);
+});
+
 test('only admins can open the report queue', function () {
     $this->actingAs(User::factory()->create())->get('/admin/laporan')->assertForbidden();
     $this->actingAs(User::factory()->admin()->create())->get('/admin/laporan')->assertOk();

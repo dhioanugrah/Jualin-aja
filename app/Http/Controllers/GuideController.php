@@ -71,7 +71,8 @@ class GuideController extends Controller
 
         return Storage::disk('local')->response($path, 'Buku Panduan Jualin Aja ITK.pdf', [
             'Content-Type' => 'application/pdf',
-            'Cache-Control' => 'public, max-age=3600',
+            'Cache-Control' => 'private, max-age=3600',
+            'Vary' => 'Cookie',
         ], 'inline');
     }
 }

@@ -43,6 +43,7 @@ test('the guide PDF is served when generated, with the admin version only for ad
     Storage::disk('local')->put('guide/buku-panduan-admin.pdf', '%PDF-admin');
 
     $guest = $this->get('/panduan.pdf')->assertOk()->assertHeader('Content-Type', 'application/pdf');
+    expect($guest->headers->get('Cache-Control'))->toContain('private')->not->toContain('public');
     expect($guest->streamedContent())->toBe('%PDF-pengguna');
 
     $admin = $this->actingAs(User::factory()->admin()->create())->get('/panduan.pdf')->assertOk();

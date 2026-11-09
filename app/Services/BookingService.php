@@ -245,6 +245,7 @@ class BookingService
             $booking->violations()
                 ->where('user_id', $actor->id)
                 ->where('type', ViolationType::NoShow)
+                ->where('status', ViolationStatus::Active)
                 ->update(['status' => ViolationStatus::Disputed]);
         });
 

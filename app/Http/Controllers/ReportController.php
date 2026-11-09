@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ReportStatus;
+use App\Enums\UserRole;
 use App\Http\Requests\ReportRequest;
 use App\Models\Product;
 use App\Models\User;
@@ -21,7 +22,7 @@ class ReportController extends Controller
         /** @var Model $target */
         $target = $request->validated('type') === 'barang'
             ? Product::query()->visible()->findOrFail($request->integer('id'))
-            : User::query()->where('is_active', true)->findOrFail($request->integer('id'));
+            : User::query()->where('is_active', true)->where('role', UserRole::Mahasiswa)->findOrFail($request->integer('id'));
 
         $ownerId = $target instanceof Product ? $target->user_id : $target->getKey();
 
