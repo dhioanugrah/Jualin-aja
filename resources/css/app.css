@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/*
+ * Design system Jualin Aja ITK (Proposal Revisi 2, bab 4.2).
+ * Biru dan kuning mengikuti logo; font Plus Jakarta Sans.
+ */
+@theme {
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
+    --color-brand-50: #eef4fc;
+    --color-brand-100: #dce8f8;
+    --color-brand-200: #b9d0f0;
+    --color-brand-300: #8bb1e3;
+    --color-brand-400: #5a8cd3;
+    --color-brand-500: #2f6fc0;
+    --color-brand-600: #1e5aa8;
+    --color-brand-700: #17457f;
+    --color-brand-800: #133a6a;
+    --color-brand-900: #102f55;
+
+    --color-accent-50: #fff8e1;
+    --color-accent-100: #ffefb8;
+    --color-accent-300: #f9d266;
+    --color-accent-400: #f5b700;
+    --color-accent-500: #dba400;
+
+    --color-ink: #0f172a;
+    --color-canvas: #f8fafc;
+
+    --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 8px 24px -12px rgb(15 23 42 / 0.18);
+    --shadow-float: 0 12px 32px -12px rgb(15 23 42 / 0.28);
+
+    --animate-fade-up: fade-up 0.25s ease-out both;
+    --animate-shimmer: shimmer 1.4s linear infinite;
+
+    @keyframes fade-up {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmer {
+        from { background-position: -200% 0; }
+        to { background-position: 200% 0; }
+    }
+}
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        @apply bg-canvas font-sans text-slate-700 antialiased;
+    }
+
+    h1, h2, h3, h4 {
+        @apply text-ink tracking-tight;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+/* Komponen dasar: tombol, kartu, field, chip, skeleton. */
+@utility btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@utility btn-primary {
+    @apply btn bg-brand-600 text-white shadow-sm hover:bg-brand-700 active:scale-[.98];
+}
+
+@utility btn-accent {
+    @apply btn bg-accent-400 font-bold text-ink shadow-sm hover:bg-accent-500 active:scale-[.98];
+}
+
+@utility btn-ghost {
+    @apply btn border border-slate-200 bg-white text-ink hover:border-slate-300 hover:bg-slate-50;
+}
+
+@utility btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700;
+}
+
+@utility card {
+    @apply rounded-2xl border border-slate-200/70 bg-white shadow-card;
+}
+
+@utility field-label {
+    @apply mb-1.5 block text-sm font-semibold text-ink;
+}
+
+@utility field {
+    @apply block w-full rounded-xl border-slate-200 bg-white px-4 py-2.5 text-sm text-ink shadow-xs placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-100;
+}
+
+@utility chip {
+    @apply inline-flex shrink-0 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:text-ink;
+}
+
+@utility chip-active {
+    @apply chip border-ink bg-ink text-white hover:border-ink hover:text-white;
+}
+
+@utility skeleton {
+    @apply animate-shimmer rounded-lg bg-[linear-gradient(90deg,#eef2f6_0%,#f8fafc_50%,#eef2f6_100%)] bg-[length:200%_100%];
+}
+
+@utility tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+@utility pb-safe {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 5rem);
+}
+
+/* Isi Buku Panduan (F14) */
+.guide-prose {
+    @apply max-w-2xl space-y-4 text-[15px] leading-relaxed text-slate-700;
+}
+.guide-prose h2 {
+    @apply pt-4 text-xl font-extrabold text-ink;
+}
+.guide-prose h3 {
+    @apply pt-2 font-bold text-ink;
+}
+.guide-prose ol {
+    @apply list-decimal space-y-1.5 pl-5;
+}
+.guide-prose ul {
+    @apply list-disc space-y-1.5 pl-5;
+}
+.guide-prose strong {
+    @apply font-bold text-ink;
+}
+.guide-prose a {
+    @apply font-semibold text-brand-600 hover:underline;
+}
+.guide-prose .tip {
+    @apply rounded-2xl border border-brand-100 bg-brand-50/70 p-4 text-sm;
+}
+.guide-prose .warn {
+    @apply rounded-2xl border border-accent-300/60 bg-accent-50 p-4 text-sm;
+}
